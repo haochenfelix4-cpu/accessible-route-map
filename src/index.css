@@ -1,0 +1,1544 @@
+/* Define the global font, text color, background, and rendering defaults. */
+:root {
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: #193936;
+  background: #f7fbfa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+/* Make declared widths include padding and borders for predictable layouts. */
+* {
+  box-sizing: border-box;
+}
+
+/* Remove the browser margin and make the page fill the viewport. */
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Let React and the main application use the complete browser viewport. */
+#root {
+  width: 100%;
+  height: 100vh;
+}
+
+/* Make form controls use the same font as the rest of the application. */
+button,
+input {
+  font: inherit;
+}
+
+/* Show a pointer cursor so buttons look interactive. */
+button {
+  cursor: pointer;
+}
+
+/* Stack the application header and main content vertically. */
+.app-shell {
+  height: 100vh;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Build the teal course header with brand, title, and lesson badge. */
+.topbar {
+  position: relative;
+  z-index: 50;
+  flex: 0 0 auto;
+  min-height: 78px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 24px;
+  color: #ffffff;
+  background: #0e8076;
+  box-shadow: 0 3px 16px rgb(14 71 66 / 18%);
+}
+
+/* Style the compact AM brand mark. */
+.brand-mark {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: #0e8076;
+  background: #d8f5ef;
+  font-weight: 900;
+}
+
+/* Keep the main page title readable without making it oversized. */
+.topbar h1 {
+  margin: 1px 0 0;
+  font-size: clamp(1.12rem, 2vw, 1.55rem);
+  line-height: 1.15;
+}
+
+/* Style small uppercase labels used throughout the interface. */
+.eyebrow {
+  margin: 0;
+  color: #8f42ed;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+}
+
+/* Adjust the eyebrow color when it appears on the teal header. */
+.topbar .eyebrow {
+  color: #aef3e7;
+}
+
+/* Style the short lesson description under the main title. */
+.subtitle {
+  margin: 3px 0 0;
+  color: #d4f4ef;
+  font-size: 0.83rem;
+}
+
+/* Style the rounded live-demo label in the header. */
+.class-pill {
+  padding: 8px 12px;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 12%);
+  font-size: 0.76rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Use the complete remaining viewport as one layered map workspace. */
+.app-layout {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ==================== CLASS 9: UI REFINEMENT ============================= */
+/* Float the search workflow above the upper-left area of the map. */
+.search-panel {
+  position: absolute;
+  z-index: 30;
+  top: 18px;
+  left: 18px;
+  width: min(430px, calc(100% - 36px));
+  /* CLASS 9: Use available map height so desktop results do not need scrolling. */
+  max-height: calc(100% - 36px);
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #cfece7;
+  border-radius: 16px;
+  background: rgb(234 248 245 / 96%);
+  box-shadow: 0 16px 40px rgb(24 67 61 / 22%);
+  backdrop-filter: blur(12px);
+}
+
+/* Keep headings in the search panel and map visually consistent. */
+.panel-intro h2,
+.map-card-header h2 {
+  margin: 3px 0 5px;
+  color: #0d746c;
+  font-size: 1.08rem;
+}
+
+/* Limit the intro paragraph width for comfortable reading. */
+.panel-intro > p:last-child {
+  max-width: 36ch;
+  margin: 0;
+  color: #58706d;
+  font-size: 0.83rem;
+  line-height: 1.45;
+}
+
+/* Keep the floating search overlay compact; the labels already explain it. */
+.search-panel .panel-intro > p:last-child {
+  display: none;
+}
+
+/* Place the two inputs and submit button in one responsive row. */
+.search-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+/* Position each suggestion dropdown relative to its own input. */
+.search-field {
+  position: relative;
+  min-width: 0;
+}
+
+/* Style the visible label above each input. */
+.search-field label {
+  display: block;
+  margin-bottom: 6px;
+  color: #345c58;
+  font-size: 0.75rem;
+  font-weight: 850;
+}
+
+/* Style the controlled address inputs. */
+.search-field input {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1px solid #b7dcd6;
+  border-radius: 10px;
+  outline: none;
+  color: #193936;
+  background: #ffffff;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+/* Make keyboard focus easy to see on each input. */
+.search-field input:focus {
+  border-color: #8f42ed;
+  box-shadow: 0 0 0 3px rgb(143 66 237 / 14%);
+}
+
+/* CLASS 4: Make disabled inputs visibly unavailable during loading. */
+.search-field input:disabled {
+  cursor: wait;
+  color: #718783;
+  background: #f2f7f6;
+  opacity: 0.78;
+}
+
+/* Style the main purple route-search button. */
+.search-button {
+  min-width: 126px;
+  height: 44px;
+  padding: 0 17px;
+  border: 0;
+  border-radius: 10px;
+  color: #ffffff;
+  background: #8f42ed;
+  font-weight: 850;
+  box-shadow: 0 6px 14px rgb(143 66 237 / 23%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Darken the active button when a pointer hovers over it. */
+.search-button:hover:not(:disabled) {
+  background: #7934cc;
+}
+
+/* Communicate the loading state while the route request runs. */
+.search-button:disabled {
+  cursor: wait;
+  opacity: 0.68;
+}
+
+/* Float the suggestion list directly below its input. */
+.suggestions-panel {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  max-height: 248px;
+  overflow: auto;
+  border: 1px solid #cfe1de;
+  border-radius: 11px;
+  background: #ffffff;
+  box-shadow: 0 14px 32px rgb(19 66 60 / 18%);
+}
+
+/* Style the temporary address-loading message. */
+.suggestion-status {
+  margin: 0;
+  padding: 14px;
+  color: #607773;
+  font-size: 0.82rem;
+}
+
+/* Remove default list styles from the suggestion results. */
+.suggestions-list {
+  padding: 5px;
+  margin: 0;
+  list-style: none;
+}
+
+/* Separate adjacent address suggestions with subtle dividers. */
+.suggestions-list li + li {
+  border-top: 1px solid #edf3f2;
+}
+
+/* Make each suggestion a full-width accessible button. */
+.suggestions-list button {
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 7px;
+  text-align: left;
+  color: #244a46;
+  background: transparent;
+}
+
+/* Highlight suggestions for both pointer and keyboard users. */
+.suggestions-list button:hover,
+.suggestions-list button:focus-visible {
+  background: #eef9f7;
+}
+
+/* Put the address and coordinates on separate lines. */
+.suggestions-list span,
+.suggestions-list small {
+  display: block;
+}
+
+/* Keep long addresses inside the dropdown width. */
+.suggestions-list span {
+  overflow: hidden;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+}
+
+/* Use quieter text for the suggestion coordinates. */
+.suggestions-list small {
+  margin-top: 3px;
+  color: #7a8d8a;
+  font-size: 0.68rem;
+}
+
+/* Make status content span the full search-panel content column. */
+.route-summary,
+.request-status,
+.demo-note {
+  grid-column: 1 / -1;
+}
+
+/* CLASS 9: Present all route results inside one compact card. */
+.route-summary {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #d8e6e3;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+/* Keep distance and duration visible together without increasing panel height. */
+.route-summary-primary {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Separate the two related metrics with a quiet vertical rule. */
+.route-summary-divider {
+  width: 1px;
+  height: 32px;
+  background: #d8e6e3;
+}
+
+/* Stack each route metric label above its value. */
+.route-metric span,
+.route-metric strong {
+  display: block;
+}
+
+/* Style the smaller label for each route metric. */
+.route-metric span {
+  color: #657975;
+  font-size: 0.68rem;
+  font-weight: 750;
+}
+
+/* Emphasize the route metric value. */
+.route-metric strong {
+  margin-top: 2px;
+  color: #0d746c;
+  font-size: 1.08rem;
+}
+
+/* CLASS 9: Hide technical coordinates until a user chooses to inspect them. */
+.coordinate-summary {
+  padding-top: 7px;
+  border-top: 1px solid #e5efed;
+  color: #5d736f;
+  font-size: 0.72rem;
+}
+
+/* Make the disclosure look actionable without resembling a primary button. */
+.coordinate-summary summary {
+  width: fit-content;
+  cursor: pointer;
+  color: #0d746c;
+  font-weight: 800;
+}
+
+/* Add breathing room only after the coordinate disclosure is opened. */
+.coordinate-summary-content {
+  display: grid;
+  gap: 4px;
+  margin-top: 7px;
+}
+
+/* Emphasize each coordinate endpoint without overpowering its value. */
+.coordinate-summary-content b {
+  color: #324e4b;
+}
+/* ======================================================================= */
+
+/* ==================== CLASS 4: REQUEST FEEDBACK ==================== */
+/* Give loading and error messages the same easy-to-scan structure. */
+.request-status {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin: 0;
+  padding: 11px 13px;
+  border: 1px solid;
+  border-radius: 10px;
+}
+
+/* Stack each feedback heading above its supporting explanation. */
+.request-status div,
+.request-status strong,
+.request-status span {
+  min-width: 0;
+}
+
+/* Make the feedback heading visually stronger than its explanation. */
+.request-status strong,
+.request-status div > span {
+  display: block;
+}
+
+/* Keep the supporting explanation compact and readable. */
+.request-status div > span {
+  margin-top: 2px;
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* CLASS 4 LOADING: Use teal styling for an in-progress request. */
+.request-status-loading {
+  color: #0d746c;
+  background: #e5f8f4;
+  border-color: #a9ded5;
+}
+
+/* CLASS 4 ERROR: Use red styling for a failed request. */
+.request-status-error {
+  color: #9a2f3d;
+  background: #fff0f2;
+  border-color: #f2bdc5;
+}
+
+/* Draw a compact circular error symbol without an external icon library. */
+.error-icon {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #c84659;
+  font-weight: 900;
+}
+
+/* CLASS 4 LOADING: Draw a spinner that communicates ongoing work. */
+.loading-spinner {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgb(255 255 255 / 45%);
+  border-top-color: currentcolor;
+  border-radius: 50%;
+  animation: spin 700ms linear infinite;
+}
+
+/* Use a darker spinner track inside the light loading status card. */
+.request-status-loading .loading-spinner {
+  border-color: rgb(13 116 108 / 20%);
+  border-top-color: #0d746c;
+}
+
+/* Rotate the loading spinner continuously until the request finishes. */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Style the quiet provider note shown before the first route. */
+.demo-note {
+  margin: 0;
+  color: #718783;
+  font-size: 0.7rem;
+}
+
+/* Make MapLibre fill the complete layered workspace. */
+.map-card {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  background: #ffffff;
+  box-shadow: none;
+}
+
+/* ==================== CLASS 5: OSM ACCESSIBILITY LAYER ==================== */
+/* Float map and OSM information as a tall sidebar on the map's right edge. */
+.map-information-panel {
+  position: absolute;
+  z-index: 20;
+  top: 18px;
+  right: 18px;
+  width: min(380px, calc(100% - 36px));
+  max-height: calc(100% - 36px);
+  overflow-y: auto;
+  padding: 18px;
+  border: 1px solid rgb(190 221 215 / 90%);
+  border-radius: 15px;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 16px 40px rgb(24 67 61 / 22%);
+  backdrop-filter: blur(12px);
+}
+
+/* Stack the OSM explanation, vertical legend, and query status. */
+.accessibility-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  padding-top: 13px;
+  margin-top: 10px;
+  border-top: 1px solid #e2ecea;
+}
+
+/* Keep the short OpenStreetMap explanation compact and readable. */
+.accessibility-intro > p:last-child {
+  max-width: 48ch;
+  margin: 3px 0 0;
+  color: #5c7470;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+/* Give every facility type its own complete row for easier scanning. */
+.accessibility-legend {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+/* Let every category button use the complete legend cell. */
+.accessibility-legend li {
+  min-width: 0;
+}
+
+/* Place the legend heading and reset action on one compact line. */
+.facility-filter-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #46625e;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+/* Style the reset action as a quiet secondary control. */
+.show-all-facilities {
+  padding: 4px 8px;
+  border: 1px solid #b9dcd6;
+  border-radius: 7px;
+  color: #0d746c;
+  background: #f2fbf9;
+  font-size: 0.64rem;
+  font-weight: 850;
+}
+
+/* Keep the disabled reset control visible without suggesting it is active. */
+.show-all-facilities:disabled {
+  cursor: default;
+  opacity: 0.42;
+}
+
+/* Make every legend entry a full-width, keyboard-accessible filter. */
+.facility-filter {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: #46625e;
+  background: transparent;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+/* Show pointer and keyboard users which facility type can be selected. */
+.facility-filter:hover,
+.facility-filter:focus-visible {
+  border-color: #badfd8;
+  background: #f0faf8;
+  outline: none;
+}
+
+/* Keep the chosen facility type visually connected to its map highlight. */
+.facility-filter.is-active {
+  border-color: #9f67e8;
+  color: #5d269f;
+  background: #f4ecff;
+  box-shadow: 0 0 0 2px rgb(143 66 237 / 10%);
+}
+
+/* Present the number of matching facilities as compact metadata. */
+.facility-count {
+  min-width: 20px;
+  padding: 2px 5px;
+  border-radius: 999px;
+  color: #536d69;
+  background: #e8f1ef;
+  text-align: center;
+  font-size: 0.64rem;
+}
+
+/* Reuse MapLibre category colors in the visible legend. */
+.legend-dot {
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  background: var(--legend-color);
+  box-shadow: 0 0 0 1px rgb(42 76 71 / 18%);
+}
+
+/* Present the current Overpass request state as a compact pill. */
+.accessibility-query-status {
+  max-width: none;
+  padding: 7px 10px;
+  border: 1px solid #cfe3df;
+  border-radius: 9px;
+  color: #53716c;
+  background: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+/* Reuse Class 4's loading visual language for the Overpass request. */
+.accessibility-query-status.status-loading {
+  color: #0d746c;
+  border-color: #a9ded5;
+  background: #e5f8f4;
+}
+
+/* Highlight a completed query without making it look like an error. */
+.accessibility-query-status.status-success {
+  color: #39685f;
+  border-color: #b9ddd5;
+  background: #edf9f6;
+}
+
+/* Make an Overpass failure easy to distinguish and find. */
+.accessibility-query-status.status-error {
+  color: #9a2f3d;
+  border-color: #f2bdc5;
+  background: #fff0f2;
+}
+
+/* Explain the currently highlighted subset below the query result. */
+.facility-filter-summary {
+  margin: -5px 0 0;
+  color: #6631aa;
+  font-size: 0.65rem;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+/* ==================== CLASS 6: ACCESSIBILITY SCORING ==================== */
+/* Separate the scoring lesson from the Class 5 facility filter above it. */
+.score-card {
+  display: grid;
+  gap: 12px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid #dbe9e6;
+}
+
+/* Keep the scoring title and current risk indicator on one row. */
+.score-card-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Give the Class 6 section a compact heading suitable for the sidebar. */
+.score-card-heading h3 {
+  margin: 4px 0 0;
+  color: #173f3a;
+  font-size: 1rem;
+}
+
+/* Present the derived risk as a strongly colored visual indicator. */
+.risk-badge {
+  flex: 0 0 auto;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 0.64rem;
+  font-weight: 900;
+}
+
+/* Reuse green for a well-supported low-risk result. */
+.risk-badge.risk-low {
+  color: #08705e;
+  background: #dff5ef;
+}
+
+/* Reuse amber for a result that contains concerns. */
+.risk-badge.risk-moderate {
+  color: #8a5700;
+  background: #fff0cc;
+}
+
+/* Reuse red for a result with multiple or strongly weighted barriers. */
+.risk-badge.risk-high {
+  color: #9a2f3d;
+  background: #ffe2e7;
+}
+
+/* Use neutral styling when coverage cannot support a risk conclusion. */
+.risk-badge.risk-unknown {
+  color: #586c69;
+  background: #e9f0ef;
+}
+
+/* Explain why no score is shown before data is ready. */
+.score-empty-state {
+  margin: 0;
+  padding: 11px;
+  border-radius: 9px;
+  color: #667b78;
+  background: #f2f7f6;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+/* Place the score ring beside the two supporting metrics. */
+.score-overview {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+
+/* Draw a compact circular meter using the numeric CSS variable from React. */
+.score-ring {
+  width: 88px;
+  height: 88px;
+  display: grid;
+  place-content: center;
+  border-radius: 50%;
+  color: #0d746c;
+  background:
+    radial-gradient(circle, #ffffff 59%, transparent 61%),
+    conic-gradient(#13b8a2 var(--score-progress), #e1ecea 0);
+  text-align: center;
+}
+
+/* Switch the meter color when the result indicates moderate risk. */
+.score-ring.risk-moderate {
+  background:
+    radial-gradient(circle, #ffffff 59%, transparent 61%),
+    conic-gradient(#e09b2d var(--score-progress), #e1ecea 0);
+}
+
+/* Switch the meter color when the result indicates high risk. */
+.score-ring.risk-high {
+  background:
+    radial-gradient(circle, #ffffff 59%, transparent 61%),
+    conic-gradient(#d1495b var(--score-progress), #e1ecea 0);
+}
+
+/* Use a neutral ring when the available evidence is insufficient. */
+.score-ring.risk-unknown {
+  background:
+    radial-gradient(circle, #ffffff 59%, transparent 61%),
+    conic-gradient(#82928f var(--score-progress), #e1ecea 0);
+}
+
+/* Make the score the strongest number in the Class 6 panel. */
+.score-ring strong {
+  font-size: 1.45rem;
+  line-height: 1;
+}
+
+/* Keep the score denominator visually secondary. */
+.score-ring span {
+  margin-top: 3px;
+  color: #718783;
+  font-size: 0.62rem;
+}
+
+/* Stack data coverage and barrier count beside the ring. */
+.score-metrics {
+  display: grid;
+  gap: 7px;
+}
+
+/* Give each supporting metric its own readable row. */
+.score-metrics > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f2f8f7;
+}
+
+/* Keep metric labels quieter than their values. */
+.score-metrics span {
+  color: #607773;
+  font-size: 0.68rem;
+}
+
+/* Emphasize the coverage percentage and barrier count. */
+.score-metrics strong {
+  color: #173f3a;
+  font-size: 0.86rem;
+}
+
+/* Draw a full-width track for the independent coverage calculation. */
+.coverage-track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e3ecea;
+}
+
+/* Fill the coverage track using the percentage supplied by React. */
+.coverage-track span {
+  height: 100%;
+  display: block;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8f42ed, #13b8a2);
+}
+
+/* Present the plain-language explanation as a separate teaching block. */
+.score-explanation {
+  margin: 0;
+  color: #526d68;
+  font-size: 0.72rem;
+  line-height: 1.48;
+}
+
+/* Separate the barrier list from the score explanation above it. */
+.barrier-detection {
+  padding: 10px;
+  border: 1px solid #f0d5d9;
+  border-radius: 10px;
+  background: #fff8f9;
+}
+
+/* Keep the barrier title and map action aligned. */
+.barrier-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #7f3440;
+  font-size: 0.7rem;
+}
+
+/* Make the map-highlighting action compact and discoverable. */
+.barrier-heading button {
+  padding: 4px 7px;
+  border: 1px solid #e6abb4;
+  border-radius: 7px;
+  color: #9a2f3d;
+  background: #ffffff;
+  font-size: 0.61rem;
+  font-weight: 850;
+}
+
+/* Remove default list spacing from the detected barrier summary. */
+.barrier-detection ul {
+  display: grid;
+  gap: 6px;
+  padding: 0;
+  margin: 9px 0 0;
+  list-style: none;
+}
+
+/* Align each warning icon with the barrier name and category. */
+.barrier-detection li {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+}
+
+/* Draw a compact red warning icon without another icon dependency. */
+.barrier-detection li > span {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #d1495b;
+  font-size: 0.65rem;
+  font-weight: 900;
+}
+
+/* Stack the barrier name and normalized category. */
+.barrier-detection li strong,
+.barrier-detection li small {
+  display: block;
+}
+
+/* Keep long OSM names inside the sidebar width. */
+.barrier-detection li strong {
+  overflow: hidden;
+  color: #62323a;
+  font-size: 0.68rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Make the barrier category readable but visually secondary. */
+.barrier-detection li small {
+  margin-top: 1px;
+  color: #91636a;
+  font-size: 0.6rem;
+}
+
+/* Style the no-barrier result without implying a safety guarantee. */
+.barrier-detection > p {
+  margin: 8px 0 0;
+  color: #637773;
+  font-size: 0.67rem;
+}
+
+/* Keep the safety limitation visible at the end of the scoring section. */
+.score-disclaimer {
+  margin: 0;
+  color: #7a8d8a;
+  font-size: 0.61rem;
+  font-style: italic;
+  line-height: 1.4;
+}
+/* ======================================================================= */
+
+/* ==================== CLASS 8: LIVE AI ACCESSIBILITY ASSISTANT ========= */
+/* Separate the AI lesson from the deterministic Class 6 score above it. */
+.ai-assistant {
+  display: grid;
+  gap: 11px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid #dbe9e6;
+}
+
+/* Keep the AI title and compact identifier on the same row. */
+.ai-assistant-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* Match the AI title scale to the existing score-card heading. */
+.ai-assistant-heading h3 {
+  margin: 4px 0 0;
+  color: #173f3a;
+  font-size: 1rem;
+}
+
+/* Draw a small purple badge that identifies generated content. */
+.ai-badge {
+  min-width: 30px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #8f42ed;
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 900;
+}
+
+/* Explain the AI step without crowding the narrow information panel. */
+.ai-intro {
+  margin: 0;
+  color: #59716d;
+  font-size: 0.72rem;
+  line-height: 1.45;
+}
+
+/* Stack the traveler-profile label above its select control. */
+.profile-field {
+  display: grid;
+  gap: 5px;
+  color: #46625e;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+/* Make the profile selector easy to use with pointer and keyboard. */
+.profile-field select {
+  width: 100%;
+  height: 39px;
+  padding: 0 10px;
+  border: 1px solid #b7dcd6;
+  border-radius: 9px;
+  outline: none;
+  color: #264b46;
+  background: #ffffff;
+}
+
+/* Provide a clear visible focus state for the profile selector. */
+.profile-field select:focus-visible {
+  border-color: #8f42ed;
+  box-shadow: 0 0 0 3px rgb(143 66 237 / 14%);
+}
+
+/* Style the main Class 8 action as a full-width purple button. */
+.generate-report-button {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 9px;
+  color: #ffffff;
+  background: #8f42ed;
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+/* Make the available AI action visibly interactive. */
+.generate-report-button:hover:not(:disabled) {
+  background: #7934cc;
+}
+
+/* Communicate both unavailable evidence and in-progress requests. */
+.generate-report-button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+/* Use a white spinner so loading remains visible on the purple button. */
+.generate-report-button .loading-spinner {
+  border-color: rgb(255 255 255 / 38%);
+  border-top-color: #ffffff;
+}
+
+/* Explain why the AI button is unavailable before route data is ready. */
+.ai-empty-state {
+  margin: 0;
+  color: #718783;
+  font-size: 0.67rem;
+  line-height: 1.4;
+}
+
+/* Present backend or provider failures in the existing error language. */
+.ai-error {
+  margin: 0;
+  padding: 9px 10px;
+  border: 1px solid #f2bdc5;
+  border-radius: 9px;
+  color: #9a2f3d;
+  background: #fff0f2;
+  font-size: 0.68rem;
+  line-height: 1.4;
+}
+
+/* Group the generated answer so users can distinguish it from source data. */
+.ai-report {
+  display: grid;
+  gap: 11px;
+  padding: 12px;
+  border: 1px solid #d9c3f6;
+  border-radius: 11px;
+  color: #345450;
+  background: linear-gradient(145deg, #fbf8ff, #f1fbf9);
+}
+
+/* Align the report heading with its source-mode label. */
+.ai-report-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #5d269f;
+  font-size: 0.72rem;
+}
+
+/* Make demo output impossible to confuse with a real API response. */
+.ai-report-label-row span {
+  color: #6b7f7c;
+  font-size: 0.6rem;
+  font-weight: 750;
+}
+
+/* Normalize paragraph spacing and readability inside the generated report. */
+.ai-report p {
+  margin: 0;
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+/* Separate each structured report section with a subtle rule. */
+.ai-report-block {
+  padding-top: 9px;
+  border-top: 1px solid rgb(143 66 237 / 12%);
+}
+
+/* Keep report subheadings clear but compact. */
+.ai-report-block h4 {
+  margin: 0 0 5px;
+  color: #214b46;
+  font-size: 0.7rem;
+}
+
+/* Use modest list spacing for quick scanning in the map sidebar. */
+.ai-report-block ul {
+  display: grid;
+  gap: 5px;
+  padding-left: 17px;
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.42;
+}
+
+/* Make the safety limitation visually distinct from recommendations. */
+.ai-safety-notice {
+  padding: 9px;
+  border-radius: 8px;
+  color: #7f3440;
+  background: #fff0f2;
+}
+
+/* Keep the confidence caveat visible without overpowering the report. */
+.ai-confidence-note {
+  color: #718783;
+  font-style: italic;
+}
+
+/* Reinforce the secure browser-to-server architecture below the demo. */
+.ai-architecture-note {
+  margin: 0;
+  color: #637975;
+  font-size: 0.62rem;
+  font-weight: 750;
+  line-height: 1.4;
+}
+/* ======================================================================= */
+
+/* Stack the accessible name, category, and raw tag inside facility popups. */
+.accessibility-popup strong,
+.accessibility-popup span,
+.accessibility-popup small {
+  display: block;
+}
+
+/* Emphasize the normalized category below the feature name. */
+.accessibility-popup span {
+  margin-top: 3px;
+  color: #0d746c;
+  font-weight: 800;
+}
+
+/* Show the original wheelchair tag as quieter supporting data. */
+.accessibility-popup small {
+  margin-top: 4px;
+  color: #687c79;
+}
+
+/* ==================== CLASS 5: FACILITY DETAIL SECTION =================== */
+/* Append selected-marker details to the bottom of the right MapView sidebar. */
+.facility-detail-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #dbe9e6;
+  color: #294a46;
+}
+
+/* Keep the sidebar image readable without making the detail section too tall. */
+.facility-detail-section .facility-detail-image,
+.facility-detail-section .facility-image-placeholder {
+  width: 100%;
+  height: 148px;
+  min-height: 148px;
+  margin-top: 12px;
+}
+
+/* Keep the selected facility title and close action on the same row. */
+.facility-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+/* Use a readable card title that does not compete with the app heading. */
+.facility-detail-header h2 {
+  margin: 4px 0 0;
+  color: #173f3a;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+/* Style the detail close action consistently with the map overlay control. */
+.facility-detail-close {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #d6e5e2;
+  border-radius: 9px;
+  color: #365e59;
+  background: #f4faf8;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+/* Make the detail close control clear for hover and keyboard focus. */
+.facility-detail-close:hover,
+.facility-detail-close:focus-visible {
+  color: #ffffff;
+  background: #0e8076;
+}
+
+/* Display a supplied OSM image at a consistent, useful size. */
+.facility-detail-image {
+  width: 100%;
+  height: 148px;
+  display: block;
+  margin-top: 14px;
+  border-radius: 11px;
+  object-fit: cover;
+  background: #e6f1ef;
+}
+
+/* Provide an honest visual state when the selected OSM feature has no image. */
+.facility-image-placeholder {
+  min-height: 132px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 4px;
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px dashed #b9dcd6;
+  border-radius: 11px;
+  color: #496b66;
+  background: linear-gradient(135deg, #e5f7f3, #f4ecff);
+  text-align: center;
+}
+
+/* Draw a simple image symbol without adding another asset dependency. */
+.facility-image-placeholder > span {
+  color: #8f42ed;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+/* Keep the placeholder's teaching note subtle. */
+.facility-image-placeholder small {
+  color: #708480;
+  font-size: 0.68rem;
+}
+
+/* Reuse the selected facility color in its readable category badge. */
+.facility-category-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 13px;
+  padding: 6px 9px;
+  border-radius: 999px;
+  color: #294a46;
+  background: #edf5f3;
+  font-size: 0.7rem;
+  font-weight: 850;
+}
+
+/* Draw the category's map color directly inside the detail badge. */
+.facility-category-badge::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--facility-color);
+  box-shadow: 0 0 0 2px #ffffff;
+}
+
+/* Keep the OSM description comfortable to read inside the compact card. */
+.facility-description {
+  margin: 12px 0;
+  color: #506b67;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* Remove the default description-list spacing before defining detail rows. */
+.facility-detail-list {
+  margin: 0;
+}
+
+/* Align detail labels and values in a stable two-column structure. */
+.facility-detail-list > div {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 10px;
+  padding: 8px 0;
+  border-top: 1px solid #e6efed;
+  font-size: 0.74rem;
+}
+
+/* Distinguish the field labels from contributed OSM values. */
+.facility-detail-list dt {
+  color: #708480;
+  font-weight: 750;
+}
+
+/* Let long contributed values wrap safely inside the card. */
+.facility-detail-list dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: #294a46;
+}
+
+/* Style the source link as the final action in the detail card. */
+.facility-osm-link {
+  display: inline-flex;
+  margin-top: 11px;
+  color: #6e2bbd;
+  font-size: 0.74rem;
+  font-weight: 850;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+/* ========================================================================== */
+/* ========================================================================== */
+
+/* Arrange the floating map title and close button on one line. */
+.map-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0;
+}
+
+/* Remove extra space below the map title. */
+.map-card-header h2 {
+  margin-bottom: 0;
+}
+
+/* Style the small interaction hint on the right. */
+.map-interaction-hint {
+  margin: 5px 0 0;
+  color: #708480;
+  font-size: 0.72rem;
+  font-weight: 750;
+}
+
+/* Style the compact control that closes the floating information panel. */
+.map-information-close {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #d6e5e2;
+  border-radius: 9px;
+  color: #365e59;
+  background: #f4faf8;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+/* Highlight the close control for pointer and keyboard users. */
+.map-information-close:hover,
+.map-information-close:focus-visible {
+  color: #ffffff;
+  background: #0e8076;
+}
+
+/* Keep a small reopening control after the main overlay is closed. */
+.map-information-open {
+  position: absolute;
+  z-index: 20;
+  bottom: 18px;
+  right: 18px;
+  padding: 10px 14px;
+  border: 1px solid #b9dcd6;
+  border-radius: 10px;
+  color: #ffffff;
+  background: #0e8076;
+  box-shadow: 0 10px 28px rgb(24 67 61 / 24%);
+  font-size: 0.76rem;
+  font-weight: 850;
+}
+
+/* Give the MapLibre container enough height to render correctly. */
+.map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Draw each custom marker as a colored map pin. */
+.map-marker {
+  width: 24px;
+  height: 30px;
+  border: 3px solid #ffffff;
+  border-radius: 13px 13px 13px 3px;
+  background: var(--marker-color);
+  box-shadow: 0 4px 10px rgb(31 62 58 / 30%);
+  transform: rotate(-45deg);
+}
+
+/* Add the white center dot inside each marker. */
+.map-marker::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* Give keyboard-focused markers a strong visible outline. */
+.map-marker:focus-visible {
+  outline: 3px solid #202020;
+  outline-offset: 3px;
+}
+
+/* Match MapLibre popups to the application's visual language. */
+.maplibregl-popup-content {
+  max-width: 260px;
+  border-radius: 10px;
+  color: #244a46;
+  font-family: inherit;
+  line-height: 1.4;
+}
+
+/* Use quieter text for coordinates inside map popups. */
+.maplibregl-popup-content span {
+  color: #687c79;
+  font-size: 0.75rem;
+}
+
+/* Stack search-panel columns on medium-width screens. */
+@media (max-width: 920px) {
+  .panel-intro > p:last-child {
+    max-width: none;
+  }
+
+  /* Keep both left and right overlays comfortable on smaller laptops. */
+  .map-information-panel {
+    width: min(340px, calc(100% - 36px));
+  }
+}
+
+/* Simplify the header, form, results, and map on small screens. */
+@media (max-width: 720px) {
+  .topbar {
+    grid-template-columns: auto minmax(0, 1fr);
+    padding: 12px 16px;
+  }
+
+  .class-pill {
+    display: none;
+  }
+
+  .app-layout {
+    padding: 0;
+  }
+
+  /* Keep the search overlay usable without covering the complete map. */
+  .search-panel {
+    top: 10px;
+    left: 10px;
+    width: calc(100% - 20px);
+    max-height: 48vh;
+    padding: 13px;
+  }
+
+  .search-button {
+    width: 100%;
+  }
+
+  .map-card {
+    min-height: 0;
+  }
+
+  /* Anchor the collapsible information panel below the search overlay. */
+  .map-information-panel {
+    top: auto;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: auto;
+    max-height: 38vh;
+    padding: 13px;
+  }
+
+  /* Keep the reopening control aligned with the mobile panel edge. */
+  .map-information-open {
+    right: 10px;
+    bottom: 10px;
+  }
+
+  /* Use one column when accessibility labels become too narrow. */
+  .accessibility-legend {
+    grid-template-columns: 1fr;
+  }
+
+  /* Keep selected facility media compact inside the mobile sidebar. */
+  .facility-detail-section .facility-detail-image,
+  .facility-detail-section .facility-image-placeholder {
+    height: 126px;
+    min-height: 126px;
+  }
+}
